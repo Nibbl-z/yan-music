@@ -1,14 +1,14 @@
-#include "downloader.hpp"
+#include "download.hpp"
 #include "filesystem"
 #include <string>
 #include <iostream>
 
-bool Downloader::init(std::string directory) {
+bool DownloadHandler::init(std::string directory) {
     std::filesystem::create_directory(directory);
     return true;
 }
 
-bool Downloader::downloadPlaylist(std::string url, std::string directory) {
+bool DownloadHandler::downloadPlaylist(std::string url, std::string directory) {
     std::string args[] = {
         "-4",
         "-P \"" + directory + "\"",
