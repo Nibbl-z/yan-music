@@ -26,7 +26,7 @@ bool ConfigHandler::init() {
     stream.close();
 
     config = defaultConfig;
-
+    
     return true;
 }
 

@@ -2,13 +2,12 @@
 #include "download.hpp"
 #include "config.hpp"
 #include <iostream>
-
-DownloadHandler gDownload;
-ConfigHandler gConfig;
+#include "globals.hpp"
 
 class YanMusic : public wxApp {
 public:
     bool OnInit() override;
+    int OnExit() override;
 };
 
 bool YanMusic::OnInit() {
@@ -16,6 +15,8 @@ bool YanMusic::OnInit() {
     frame->Show(true);
 
     gConfig.init();
+    gDownload.initPlaylistDbFile();
+
 
     for (std::string playlist : gConfig.config.playlists) {
         std::cout << playlist << "\n";
@@ -25,10 +26,28 @@ bool YanMusic::OnInit() {
         std::cout << flag << "\n";
     }
 
-    // gDownload.init("/home/nibbles/Music/yanmusic");
-    // gDownload.downloadPlaylist("https://www.youtube.com/playlist?list=PLe1eTeDGapCwwQdNwf2_1d-Fam5YMyMwX", "/home/nibbles/Music/yanmusic");
+    // at some point when theres user inputted playlists
+    // "/(?<=&list=).{34}/g" is the regex to get the id
+
+    if (gConfig.config.musicDirectory != "") {
+        bool success = gDownload.init(gConfig.config.musicDirectory);
+        if (!success) {
+            std::cout << "failed to initialize directory at " << gConfig.config.musicDirectory << "\n";
+        } else {
+            for (std::string playlist : gConfig.config.playlists) {
+                gDownload.downloadPlaylist(playlist, gConfig.config.musicDirectory);
+            }
+        }
+    }
 
     return true;
+}
+
+int YanMusic::OnExit() {
+    gConfig.save();
+    gDownload.saveDb();
+
+    return 0;
 }
 
 wxIMPLEMENT_APP(YanMusic);

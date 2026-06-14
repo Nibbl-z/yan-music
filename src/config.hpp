@@ -5,14 +5,15 @@
 #include <nlohmann/json_fwd.hpp>
 
 #define CONFIG_FOLDER "yan-music/"
-#define CONFIG_NAME "yan-music_conf.json"
+#define CONFIG_NAME "conf.json"
 
 typedef struct {
     std::vector<std::string> playlists;
     std::vector<std::string> ytdlpFlags;
+    std::string musicDirectory;
 } Config;
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Config, playlists, ytdlpFlags)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Config, playlists, ytdlpFlags, musicDirectory)
 
 const Config defaultConfig = {
     {
@@ -21,7 +22,10 @@ const Config defaultConfig = {
     {
         "-4",
         "--sleep-interval 5",
-    }
+        "-x",
+        "--audio-format mp3"
+    },
+    ""
 };
 
 class ConfigHandler {
