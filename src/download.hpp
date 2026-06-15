@@ -7,23 +7,24 @@
 #include <nlohmann/detail/macro_scope.hpp>
 
 typedef struct {
-    std::unordered_map<std::string, std::vector<std::string>> ids;
-} PlaylistDB;
+    std::vector<std::string> ids;
+} SongDB;
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(PlaylistDB, ids)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(SongDB, ids)
 
-const PlaylistDB defaultDB {
+const SongDB defaultDB {
     {}
 };
 
 class DownloadHandler {
     public:
         bool init(std::string directory);
-        bool initPlaylistDbFile();
+        bool initSongDbFile();
         bool loadDb();
         bool saveDb();
-        bool downloadPlaylist(std::string id, std::string directory);
-        PlaylistDB db;
+        bool download();
+        bool downloadPlaylist(std::string id, std::string directory, std::vector<std::string>* r);
+        SongDB db;
     private:
         std::string dbPath;
 };

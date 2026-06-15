@@ -15,7 +15,7 @@ bool YanMusic::OnInit() {
     frame->Show(true);
 
     gConfig.init();
-    gDownload.initPlaylistDbFile();
+    gDownload.initSongDbFile();
 
 
     for (std::string playlist : gConfig.config.playlists) {
@@ -34,9 +34,7 @@ bool YanMusic::OnInit() {
         if (!success) {
             std::cout << "failed to initialize directory at " << gConfig.config.musicDirectory << "\n";
         } else {
-            for (std::string playlist : gConfig.config.playlists) {
-                gDownload.downloadPlaylist(playlist, gConfig.config.musicDirectory);
-            }
+            gDownload.download();
         }
     }
 
